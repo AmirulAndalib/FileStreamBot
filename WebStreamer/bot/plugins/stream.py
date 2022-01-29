@@ -93,9 +93,14 @@ async def private_receive_handler(c: Client, m: Message):
             quote=True
         )
     except FloodWait as e:
-        print(f"Sleeping for {str(e.x)}s")
+        print(f'Sleeping for {e.x}s')
         await asyncio.sleep(e.x)
-        await c.send_message(chat_id=Var.BIN_CHANNEL, text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**𝚄𝚜𝚎𝚛 𝙸𝙳 :** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="Markdown")
+        await c.send_message(
+            chat_id=Var.BIN_CHANNEL,
+            text=f'Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {e.x}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**𝚄𝚜𝚎𝚛 𝙸𝙳 :** `{m.from_user.id}`',
+            disable_web_page_preview=True,
+            parse_mode="Markdown",
+        )
 
 
 @StreamBot.on_message(filters.channel & (filters.document | filters.video) & ~filters.edited, group=-1)
@@ -110,24 +115,36 @@ async def channel_receive_handler(bot, broadcast):
                                     Var.PORT,
                                     log_msg.message_id)
         await log_msg.reply_text(
-            text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/{(await bot.get_me()).username}?start=AvishkarPatil_{str(log_msg.message_id)}",
-            # text=f"**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/FxStreamBot?start=AvishkarPatil_{str(log_msg.message_id)}",
+            text=f'**Cʜᴀɴɴᴇʟ Nᴀᴍᴇ:** `{broadcast.chat.title}`\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`\n**Rᴇǫᴜᴇsᴛ ᴜʀʟ:** https://t.me/{(await bot.get_me()).username}?start=AvishkarPatil_{log_msg.message_id}',
             quote=True,
-            parse_mode="Markdown"
+            parse_mode="Markdown",
         )
+
         await bot.edit_message_reply_markup(
             chat_id=broadcast.chat.id,
             message_id=broadcast.message_id,
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/{(await bot.get_me()).username}?start=AvishkarPatil_{str(log_msg.message_id)}")]])
-            # [[InlineKeyboardButton("Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥", url=f"https://t.me/FxStreamBot?start=AvishkarPatil_{str(log_msg.message_id)}")]])
+                [
+                    [
+                        InlineKeyboardButton(
+                            "Dᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ 📥",
+                            url=f'https://t.me/{(await bot.get_me()).username}?start=AvishkarPatil_{log_msg.message_id}',
+                        )
+                    ]
+                ]
+            ),
         )
+
     except FloodWait as w:
-        print(f"Sleeping for {str(w.x)}s")
+        print(f'Sleeping for {w.x}s')
         await asyncio.sleep(w.x)
-        await bot.send_message(chat_id=Var.BIN_CHANNEL,
-                             text=f"Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {str(w.x)}s from {broadcast.chat.title}\n\n**Cʜᴀɴɴᴇʟ ID:** `{str(broadcast.chat.id)}`",
-                             disable_web_page_preview=True, parse_mode="Markdown")
+        await bot.send_message(
+            chat_id=Var.BIN_CHANNEL,
+            text=f'Gᴏᴛ FʟᴏᴏᴅWᴀɪᴛ ᴏғ {w.x}s from {broadcast.chat.title}\n\n**Cʜᴀɴɴᴇʟ ID:** `{broadcast.chat.id}`',
+            disable_web_page_preview=True,
+            parse_mode="Markdown",
+        )
+
     except Exception as e:
         await bot.send_message(chat_id=Var.BIN_CHANNEL, text=f"**#ᴇʀʀᴏʀ_ᴛʀᴀᴄᴇʙᴀᴄᴋ:** `{e}`", disable_web_page_preview=True, parse_mode="Markdown")
         print(f"Cᴀɴ'ᴛ Eᴅɪᴛ Bʀᴏᴀᴅᴄᴀsᴛ Mᴇssᴀɢᴇ!\nEʀʀᴏʀ: {e}")
